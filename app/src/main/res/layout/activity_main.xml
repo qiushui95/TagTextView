@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    tools:context=".MainActivity">
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="0dp"
+        android:background="#f00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tagView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="0dp"
+        android:background="#f00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tagView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0px"
+        android:layout_height="1px"
+        android:background="#f00"
+        app:layout_constraintBottom_toTopOf="@id/tagView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:layout_width="0px"
+        android:layout_height="1px"
+        android:background="#f00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tagView" />
+
+    <son.ysy.custom.tag.TagTextView
+        android:id="@+id/tagView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        app:ttv_tagColor="#0FF"
+        app:ttv_tagSizeRatio="0.25"
+        app:ttv_tagStartRatio="0.25"
+        app:ttv_text="HOT"
+        app:ttv_textColor="#FFF"
+        app:ttv_textRatio="0.75"
+        app:ttv_textRotate="0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
