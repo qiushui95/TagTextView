@@ -1,5 +1,5 @@
-# ShadowLayout  
-## 阴影控件  [![](https://jitpack.io/v/qiushui95/ShadowLayout.svg)](https://jitpack.io/#qiushui95/ShadowLayout)
+# TagTextView  
+## 角标控件  [![](https://jitpack.io/v/qiushui95/TagTextView.svg)](https://jitpack.io/#qiushui95/TagTextView)
 
 ``` project build.gradle
 allprojects {
@@ -11,36 +11,26 @@ allprojects {
 
 ```
 dependencies {
-    implementation("com.github.qiushui95:ShadowLayout:1.0.0")
+    implementation("com.github.qiushui95:TagTextView:1.0.0")
 }
 ```
-## ShadowDrawable 
-    
-| 属性                    | 类型  | 说明           | 默认值    |
-| ----------------------- | ----- | -------------- | --------- |
-| shadowShowStart         | bool  | 是否显示左阴影 | true      |
-| shadowShowTop           | bool  | 是否显示上阴影 | true      |
-| shadowShowEnd           | bool  | 是否显示右阴影 | true      |
-| shadowShowBottom        | bool  | 是否显示下阴影 | true      |
-| shadowTopStartRadius    | int   | 左上方阴影圆角 | 20px      |
-| shadowTopEndRadius      | int   | 右上方阴影圆角 | 20px      |
-| shadowBottomEndRadius   | int   | 右下方阴影圆角 | 20px      |
-| shadowBottomStartRadius | int   | 左下方阴影圆角 | 20px      |
-| shadowColor             | color | 阴影颜色       | #30000000 |
-| shadowSize              | int   | 阴影长度       | 20px      |
 
-## layout属性  
-1. ### ShadowConstraintLayout 
-| 属性                      | 类型  | 对应关系                |
-| ------------------------- | ----- | ----------------------- |
-| shadowClShowStart         | bool  | shadowShowStart         |
-| shadowClShowTop           | bool  | shadowShowTop           |
-| shadowClShowEnd           | bool  | shadowShowEnd           |
-| shadowClShowBottom        | bool  | shadowShowBottom        |
-| shadowClRadius            | dimen |                         |
-| shadowClTopStartRadius    | dimen | shadowTopStartRadius    |
-| shadowClTopEndRadius      | dimen | shadowTopEndRadius      |
-| shadowClBottomEndRadius   | dimen | shadowBottomEndRadius   |
-| shadowClBottomStartRadius | dimen | shadowBottomStartRadius |
-| shadowClColor             | color | shadowColor             |
-| shadowClSize              | dimen | shadowSize              |
+### 预览  
+
+| 左上 | 右上 |右下|左下|
+|:-:|:-:|:-:|:-:|
+| ![](https://raw.githubusercontent.com/qiushui95/TagTextView/master/images/top_start.png) | ![](https://raw.githubusercontent.com/qiushui95/TagTextView/master/images/top_end.png) |![](https://raw.githubusercontent.com/qiushui95/TagTextView/master/images/bottom_end.png)|![](https://raw.githubusercontent.com/qiushui95/TagTextView/master/images/bottom_start.png)|
+
+### 属性
+
+| 序号 |     attrs属性     |       方法       |                             类型                             |  默认值  |                说明                 |
+| :--: | :---------------: | :--------------: | :----------------------------------------------------------: | :------: | :---------------------------------: |
+|  1   | ttv_tagSizeRatio  | setTagSizeRatio  |                          float(0,1)                          |   0.35   |        设置角标宽度:控件的宽        |
+|  2   | ttv_tagStartRatio | setTagStartRatio |                          float[0,1)                          |    0     |        设置角标起始位置比例         |
+|  3   |   ttv_tagColor    |   setTagColor    |                           ColorInt                           |   RED    |            设置角标颜色             |
+|  4   |  ttv_tagPosition  |   setPosition    | enum:<br />TopStart(左上)<br />TopEnd(右上)<br />BottomEnd(右下)<br />BottomStart(左下) | TopStart |            设置角标位置             |
+|  5   |   ttv_textRatio   | setTextSizeRatio |                          float(0,1)                          |   0.6    |    设置文字占角标比例,范围(0,1)     |
+|  6   |  ttv_textRotate   |  setTextRotate   |                            float                             |    0     | 设置文字旋转角度,旋转中心为角标中心 |
+|  7   |     ttv_text      |     setText      |                            String                            |          |              设置文字               |
+|  8   |   ttv_textColor   |   setTextColor   |                           ColorInt                           |  WHITE   |            设置字体颜色             |
+
