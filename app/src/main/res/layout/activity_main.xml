@@ -50,7 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5"
-        app:ttv_tagColor="#0FF"
         app:ttv_tagSizeRatio="0.25"
         app:ttv_tagStartRatio="0.25"
         app:ttv_text="HOT"

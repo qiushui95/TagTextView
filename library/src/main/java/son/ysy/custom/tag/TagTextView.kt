@@ -3,14 +3,14 @@ package son.ysy.custom.tag
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import java.lang.Math.toRadians
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class TagTextView @JvmOverloads constructor(
     context: Context,
@@ -25,7 +25,9 @@ class TagTextView @JvmOverloads constructor(
         object BottomStart : Position(3)
     }
 
-    private val paint = Paint()
+    private val tagPaint = Paint()
+
+    private val textPaint = Paint()
 
     private val contentBounds = RectF()
 
@@ -46,7 +48,14 @@ class TagTextView @JvmOverloads constructor(
     private var position: Int
 
     @ColorInt
-    private var tagColor: Int
+    private var tagColor: Int = Color.RED
+
+    @ColorInt
+    private var tagGradientStartColor: Int? = null
+
+    @ColorInt
+    private var tagGradientEndColor: Int? = null
+    private var tagGradientAngle: Double? = null
 
     private var textRatio: Float
 
@@ -59,19 +68,40 @@ class TagTextView @JvmOverloads constructor(
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.TagTextView).apply {
+
             tagSizeRatio = getFloat(R.styleable.TagTextView_ttv_tagSizeRatio, 0.35f)
             tagStartRatio = getFloat(R.styleable.TagTextView_ttv_tagStartRatio, 0f)
-            tagColor = getColor(R.styleable.TagTextView_ttv_tagColor, Color.RED)
             position = getInt(R.styleable.TagTextView_ttv_tagPosition, 0)
 
             textRotate = getFloat(R.styleable.TagTextView_ttv_textRotate, 0f)
             text = getString(R.styleable.TagTextView_ttv_text) ?: ""
             textColor = getColor(R.styleable.TagTextView_ttv_textColor, Color.WHITE)
             textRatio = getFloat(R.styleable.TagTextView_ttv_textRatio, 0.6f)
+            val hasGradientStartColor = hasValue(R.styleable.TagTextView_ttv_tagGradientStartColor)
+            val hasGradientEndColor = hasValue(R.styleable.TagTextView_ttv_tagGradientEndColor)
+            if (hasGradientStartColor && hasGradientEndColor) {
+                tagGradientStartColor = getColor(
+                    R.styleable.TagTextView_ttv_tagGradientStartColor,
+                    Color.RED
+                )
+                tagGradientEndColor = getColor(
+                    R.styleable.TagTextView_ttv_tagGradientEndColor,
+                    Color.RED
+                )
+                tagGradientAngle = getFloat(
+                    R.styleable.TagTextView_ttv_tagGradientAngle,
+                    0f
+                ).toDouble()
+            } else {
+                tagColor = getColor(R.styleable.TagTextView_ttv_tagColor, Color.RED)
+            }
+
         }.recycle()
 
-        paint.strokeWidth = 0f
-        paint.style = Paint.Style.FILL
+        tagPaint.strokeWidth = 0f
+        tagPaint.style = Paint.Style.FILL
+        textPaint.strokeWidth = 0f
+        textPaint.style = Paint.Style.FILL
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -81,21 +111,26 @@ class TagTextView @JvmOverloads constructor(
             dirty.set(false)
         }
 
-        canvas.saveLayer(contentBounds, paint)
+        canvas.saveLayer(contentBounds, tagPaint)
 
         canvas.translate(contentBounds.centerX(), contentBounds.centerY())
         canvas.rotate(tagRotate)
 
-        paint.color = tagColor
-        canvas.drawRect(tagRect, paint)
+        canvas.drawRect(tagRect, tagPaint)
 
         canvas.translate(tagRect.centerX() * 1f, 0f)
         canvas.rotate(90f)
 
         canvas.rotate(textRotate)
 
-        paint.color = textColor
-        canvas.drawText(text, 0, text.length, textStartPoint.x * 1f, textStartPoint.y * 1f, paint)
+        canvas.drawText(
+            text,
+            0,
+            text.length,
+            textStartPoint.x * 1f,
+            textStartPoint.y * 1f,
+            textPaint
+        )
 
         canvas.restore()
     }
@@ -115,7 +150,8 @@ class TagTextView @JvmOverloads constructor(
 
         val startSize = sqrt((realSize * tagStartRatio).pow(2) / 2).toInt()
 
-        paint.textSize = bgHeight * textRatio
+        textPaint.textSize = bgHeight * textRatio
+        textPaint.color = textColor
 
         tagRotate = when (position) {
             0 -> 180f + 45f
@@ -127,15 +163,44 @@ class TagTextView @JvmOverloads constructor(
         val contentSize = sqrt(realSize * realSize * 2f)
             .toInt()
 
-
         tagRect.set(
             contentSize / 2 - startSize,
             contentSize / -2,
             contentSize / 2 - startSize - bgHeight.toInt(),
             contentSize / 2
         )
+        val tagGradientStartColor = tagGradientStartColor
+        val tagGradientEndColor = tagGradientEndColor
+        val tagGradientAngle = tagGradientAngle ?: 0.0
+        if (tagGradientStartColor != null && tagGradientEndColor != null) {
+            val gradientSize = sqrt(
+                tagRect.width().toFloat().pow(2) +
+                        tagRect.height().toFloat().pow(2)
+            )
+            val radians = toRadians(tagGradientAngle)
+            val x = (cos(radians) / 2f * gradientSize).toFloat()
+            val y = (sin(radians) / 2f * gradientSize).toFloat()
+            val rectF = RectF(
+                tagRect.centerX() + x,
+                tagRect.centerY() + y,
+                tagRect.centerX() - x,
+                tagRect.centerY() - y,
+            )
 
-        paint.getTextBounds(text, 0, text.length, textRect)
+            tagPaint.shader = LinearGradient(
+                tagRect.centerX() + x,
+                tagRect.centerY() + y,
+                tagRect.centerX() - x,
+                tagRect.centerY() - y,
+                tagGradientStartColor,
+                tagGradientEndColor,
+                Shader.TileMode.CLAMP
+            )
+        } else {
+            tagPaint.color = tagColor
+        }
+
+        textPaint.getTextBounds(text, 0, text.length, textRect)
 
         textStartPoint.set(textRect.width() / -2, (textRect.height() - textRect.bottom) / 2)
     }
