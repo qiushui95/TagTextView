@@ -249,8 +249,26 @@ class TagTextView @JvmOverloads constructor(
     @CheckResult(suggest = "end with rebuild()")
     fun setTagColor(@ColorInt color: Int): TagTextView {
         this.tagColor = color
+        this.tagGradientStartColor = null
+        this.tagGradientEndColor = null
         return setMemberDirty()
     }
+
+    /**
+     * 设置角标渐变颜色
+     */
+    @CheckResult(suggest = "end with rebuild()")
+    fun setTagGradientColor(
+        @ColorInt startColor: Int,
+        @ColorInt endColor: Int,
+        angle: Double = 0.0
+    ): TagTextView {
+        this.tagGradientStartColor = startColor
+        this.tagGradientEndColor = endColor
+        this.tagGradientAngle = angle
+        return setMemberDirty()
+    }
+
 
     /**
      * 设置角标位置
@@ -260,7 +278,6 @@ class TagTextView @JvmOverloads constructor(
         this.position = position.value
         return setMemberDirty()
     }
-
 
     /**
      * 设置字体颜色
